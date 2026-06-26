@@ -1,17 +1,24 @@
 using backend.Data;
+using backend.Repositories;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using dotenv.net;
 
 DotEnv.Load();
 
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRINGS__DEFAULT_CONNECTION")
+    ?? throw new InvalidOperationException("CONNECTION_STRINGS__DEFAULT_CONNECTION no está definida en .env");
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

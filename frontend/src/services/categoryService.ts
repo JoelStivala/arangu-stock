@@ -12,10 +12,10 @@ export interface UpdateCategoryPayload {
 }
 
 export const getAll = () =>
-  api.get<Category[]>('/api/category').then((r) => r.data)
+  api.get<Category[]>('/category').then((r) => r.data)
 
 export const create = (payload: CreateCategoryPayload) =>
-  api.post<Category>('/api/category', payload).then((r) => r.data)
+  api.post<Category>('/category', payload).then((r) => r.data)
 
 export const update = (id: string, payload: UpdateCategoryPayload) =>
-  api.put<Category>(`/api/category/${id}`, payload).then((r) => r.data)
+  api.put<Category>(`/category/${id}`, payload).then((r) => r.data)

@@ -20,10 +20,10 @@ export interface UpdateOfferPayload {
 }
 
 export const getAll = () =>
-  api.get<Offer[]>('/api/offer').then((r) => r.data)
+  api.get<Offer[]>('/offer').then((r) => r.data)
 
 export const create = (payload: CreateOfferPayload) =>
-  api.post<Offer>('/api/offer', payload).then((r) => r.data)
+  api.post<Offer>('/offer', payload).then((r) => r.data)
 
 export const update = (id: string, payload: UpdateOfferPayload) =>
-  api.put<Offer>(`/api/offer/${id}`, payload).then((r) => r.data)
+  api.put<Offer>(`/offer/${id}`, payload).then((r) => r.data)

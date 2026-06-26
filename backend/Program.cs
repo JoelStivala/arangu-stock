@@ -6,8 +6,8 @@ using dotenv.net;
 
 DotEnv.Load();
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRINGS__DEFAULT_CONNECTION")
-    ?? throw new InvalidOperationException("CONNECTION_STRINGS__DEFAULT_CONNECTION no está definida en .env");
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+    ?? throw new InvalidOperationException("CONNECTION_STRING no está definida en .env");
 
 var builder = WebApplication.CreateBuilder(args);
 

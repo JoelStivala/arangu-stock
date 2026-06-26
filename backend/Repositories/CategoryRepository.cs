@@ -33,9 +33,12 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> UpdateAsync(Category category)
     {
-        _context.Categories.Update(category);
+        var existing = await _context.Categories.FindAsync(category.Id)
+            ?? throw new KeyNotFoundException($"Category with Id {category.Id} not found.");
+
+        _context.Entry(existing).CurrentValues.SetValues(category);
         await _context.SaveChangesAsync();
-        return category;
+        return existing;
     }
 
     public async Task DeleteAsync(Guid id)

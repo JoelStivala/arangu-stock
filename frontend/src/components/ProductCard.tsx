@@ -37,7 +37,7 @@ function ProductCard({ product }: ProductCardProps) {
         )}
         <h3 className="font-medium text-sm text-gray-800 line-clamp-2">{product.name}</h3>
         <p className="text-lg font-bold text-gray-900 mt-auto">
-          ${product.price.toFixed(2)}
+          ${Math.round(product.price).toLocaleString('es-AR')}
         </p>
       </div>
     </div>

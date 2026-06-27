@@ -19,6 +19,12 @@ public class ProductService : IProductService
         return products.Select(p => p.ToResponseDto()).ToList();
     }
 
+    public async Task<List<ProductResponseDto>> GetAllAdminAsync()
+    {
+        var products = await _repository.GetAllAdminAsync();
+        return products.Select(p => p.ToResponseDto()).ToList();
+    }
+
     public async Task<ProductResponseDto?> GetByIdAsync(Guid id)
     {
         var product = await _repository.GetByIdAsync(id);
@@ -42,5 +48,10 @@ public class ProductService : IProductService
     public async Task DeleteAsync(Guid id)
     {
         await _repository.DeleteAsync(id);
+    }
+
+    public async Task ActivateAsync(Guid id)
+    {
+        await _repository.ActivateAsync(id);
     }
 }

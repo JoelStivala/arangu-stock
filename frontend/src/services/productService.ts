@@ -34,5 +34,11 @@ export const create = (payload: CreateProductPayload) =>
 export const update = (id: string, payload: UpdateProductPayload) =>
   api.put<Product>(`/product/${id}`, payload).then((r) => r.data)
 
+export const getAllAdmin = () =>
+  api.get<Product[]>('/product/admin').then((r) => r.data)
+
 export const remove = (id: string) =>
   api.delete(`/product/${id}`)
+
+export const activate = (id: string) =>
+  api.patch(`/product/${id}/activate`)

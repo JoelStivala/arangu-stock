@@ -23,6 +23,13 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
+    [HttpGet("admin")]
+    public async Task<ActionResult<List<ProductResponseDto>>> GetAllAdmin()
+    {
+        var products = await _service.GetAllAdminAsync();
+        return Ok(products);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ProductResponseDto>> GetById(Guid id)
     {
@@ -59,5 +66,19 @@ public class ProductController : ControllerBase
 
         await _service.DeleteAsync(id);
         return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/activate")]
+    public async Task<ActionResult> Activate(Guid id)
+    {
+        try
+        {
+            await _service.ActivateAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }

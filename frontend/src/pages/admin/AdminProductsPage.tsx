@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAll, create, update, remove } from '../../services/productService'
+import { getAllAdmin, create, update, remove, activate } from '../../services/productService'
 import type { Product } from '../../types/Product'
 import ProductForm, { type ProductFormData } from '../../components/ProductForm'
 
@@ -13,7 +13,7 @@ function AdminProductsPage() {
   const load = () => {
     setLoading(true)
     setError(null)
-    getAll()
+    getAllAdmin()
       .then(setProducts)
       .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
       .finally(() => setLoading(false))
@@ -54,6 +54,11 @@ function AdminProductsPage() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('¿Desactivar este producto?')) return
     await remove(id)
+    load()
+  }
+
+  const handleActivate = async (id: string) => {
+    await activate(id)
     load()
   }
 
@@ -113,7 +118,7 @@ function AdminProductsPage() {
                     <span className="font-medium text-gray-900">{product.name}</span>
                   </div>
                 </td>
-                <td className="p-4 text-gray-700">${product.price.toFixed(2)}</td>
+                <td className="p-4 text-gray-700">${Math.round(product.price).toLocaleString('es-AR')}</td>
                 <td className="p-4 text-gray-700">{product.stock}</td>
                 <td className="p-4 text-gray-500">{product.categoryName}</td>
                 <td className="p-4">
@@ -123,18 +128,29 @@ function AdminProductsPage() {
                 </td>
                 <td className="p-4">
                   <div className="flex gap-2">
-                    <button
-                      onClick={() => { setEditing(product); setCreating(false) }}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="text-red-600 hover:text-red-800 text-sm font-medium"
-                    >
-                      {product.isActive ? 'Desactivar' : 'Eliminar'}
-                    </button>
+                    {product.isActive ? (
+                      <>
+                        <button
+                          onClick={() => { setEditing(product); setCreating(false) }}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product.id)}
+                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                        >
+                          Desactivar
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleActivate(product.id)}
+                        className="text-green-600 hover:text-green-800 text-sm font-medium"
+                      >
+                        Reactivar
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

@@ -23,12 +23,29 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
+    public async Task<List<Product>> GetAllAdminAsync()
+    {
+        return await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Offer)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
+    }
+
     public async Task<Product?> GetByIdAsync(Guid id)
     {
         return await _context.Products
             .Include(p => p.Category)
             .Include(p => p.Offer)
             .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
+    }
+
+    public async Task<Product?> GetByIdIncludingInactiveAsync(Guid id)
+    {
+        return await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Offer)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<Product> CreateAsync(Product product)
@@ -59,5 +76,15 @@ public class ProductRepository : IProductRepository
             product.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task ActivateAsync(Guid id)
+    {
+        var product = await _context.Products.FindAsync(id)
+            ?? throw new KeyNotFoundException($"Product with Id {id} not found.");
+
+        product.IsActive = true;
+        product.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
     }
 }

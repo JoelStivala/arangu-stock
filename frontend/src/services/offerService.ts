@@ -27,3 +27,6 @@ export const create = (payload: CreateOfferPayload) =>
 
 export const update = (id: string, payload: UpdateOfferPayload) =>
   api.put<Offer>(`/offer/${id}`, payload).then((r) => r.data)
+
+export const remove = (id: string) =>
+  api.delete(`/offer/${id}`)

@@ -19,3 +19,6 @@ export const create = (payload: CreateCategoryPayload) =>
 
 export const update = (id: string, payload: UpdateCategoryPayload) =>
   api.put<Category>(`/category/${id}`, payload).then((r) => r.data)
+
+export const remove = (id: string) =>
+  api.delete(`/category/${id}`)

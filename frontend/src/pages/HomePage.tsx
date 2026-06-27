@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getAll } from '../services/productService'
 import type { Product } from '../types/Product'
+import ProductCard from '../components/ProductCard'
 
 function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -14,21 +15,60 @@ function HomePage() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="flex items-center justify-center h-full text-lg">Cargando...</div>
-  if (error) return <div className="flex items-center justify-center h-full text-red-600">{error}</div>
-
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Productos</h1>
-      <div className="grid gap-4">
-        {products.map((product) => (
-          <div key={product.id} className="border rounded-lg p-4 shadow-sm">
-            <h2 className="text-xl font-semibold">{product.name}</h2>
-            <p className="text-gray-600">${product.price.toFixed(2)}</p>
-            <p className="text-sm text-gray-500">{product.categoryName}</p>
+    <div>
+      {/* Hero */}
+      <section className="bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+          <div className="max-w-2xl">
+            <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
+              Todo lo que necesitás, al mejor precio
+            </h1>
+            <p className="mt-4 text-lg text-gray-300">
+              Explorá nuestro catálogo de productos con los mejores precios y ofertas exclusivas.
+            </p>
+            <a
+              href="#productos"
+              className="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+            >
+              Ver productos
+            </a>
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
+
+      {/* Productos */}
+      <section id="productos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">Productos</h2>
+        </div>
+
+        {loading && (
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          </div>
+        )}
+
+        {error && (
+          <div className="text-center py-20 text-red-600">{error}</div>
+        )}
+
+        {!loading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {products
+              .filter((p) => p.isActive)
+              .map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+          </div>
+        )}
+
+        {!loading && !error && products.filter((p) => p.isActive).length === 0 && (
+          <div className="text-center py-20 text-gray-500">
+            No hay productos disponibles.
+          </div>
+        )}
+      </section>
     </div>
   )
 }

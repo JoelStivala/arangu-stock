@@ -66,7 +66,6 @@ function AdminOffersPage() {
   }
 
   const startEdit = (offer: Offer) => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
     setForm({
       name: offer.name,
       description: offer.description ?? '',
@@ -95,78 +94,81 @@ function AdminOffersPage() {
       </div>
 
       {(creating || editing) && (
-        <form onSubmit={handleSubmit} className="mb-6 p-6 bg-white border border-gray-200 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4">{editing ? 'Editar oferta' : 'Nueva oferta'}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-              <input
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-              <textarea
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={2}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Descuento (%)</label>
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={form.discountPercentage}
-                onChange={(e) => setForm({ ...form, discountPercentage: Number(e.target.value) })}
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="flex items-end pb-2">
-              <label className="flex items-center gap-2 text-sm text-gray-700">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]">
+          <div className="absolute inset-0 bg-black/40" onClick={resetForm} />
+          <form onSubmit={handleSubmit} className="relative bg-white rounded-xl shadow-xl p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-4">{editing ? 'Editar oferta' : 'Nueva oferta'}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                 <input
-                  type="checkbox"
-                  checked={form.active}
-                  onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                  className="rounded border-gray-300"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                Activa
-              </label>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                <textarea
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={2}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descuento (%)</label>
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={form.discountPercentage}
+                  onChange={(e) => setForm({ ...form, discountPercentage: Number(e.target.value) })}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="flex items-end pb-2">
+                <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={form.active}
+                    onChange={(e) => setForm({ ...form, active: e.target.checked })}
+                    className="rounded border-gray-300"
+                  />
+                  Activa
+                </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha inicio</label>
+                <input
+                  type="date"
+                  value={form.startDate}
+                  onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha fin</label>
+                <input
+                  type="date"
+                  value={form.endDate}
+                  onChange={(e) => setForm({ ...form, endDate: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="sm:col-span-2 flex gap-2">
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer">
+                  {editing ? 'Actualizar' : 'Crear'}
+                </button>
+                <button type="button" onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                  Cancelar
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha inicio</label>
-              <input
-                type="date"
-                value={form.startDate}
-                onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha fin</label>
-              <input
-                type="date"
-                value={form.endDate}
-                onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="sm:col-span-2 flex gap-2">
-              <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer">
-                {editing ? 'Actualizar' : 'Crear'}
-              </button>
-              <button type="button" onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       )}
 
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">

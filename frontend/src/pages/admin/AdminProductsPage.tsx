@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { getAllAdmin, create, update, remove, activate } from '../../services/productService'
+import { getAll as getCategories } from '../../services/categoryService'
+import { getAll as getOffers } from '../../services/offerService'
 import type { Product } from '../../types/Product'
+import type { Category } from '../../types/Category'
+import type { Offer } from '../../types/Offer'
 import ProductForm, { type ProductFormData } from '../../components/ProductForm'
 import ConfirmModal from '../../components/ConfirmModal'
 
@@ -8,6 +12,8 @@ function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [offers, setOffers] = useState<Offer[]>([])
   const [editing, setEditing] = useState<Product | null>(null)
   const [creating, setCreating] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
@@ -22,6 +28,11 @@ function AdminProductsPage() {
   }
 
   useEffect(() => { load() }, [])
+
+  useEffect(() => {
+    getCategories().then(setCategories)
+    getOffers().then(setOffers)
+  }, [])
 
   const handleCreate = async (data: ProductFormData) => {
     await create({
@@ -80,18 +91,19 @@ function AdminProductsPage() {
       </div>
 
       {(creating || editing) && (
-        <div className="mb-6 p-6 bg-white border border-gray-200 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4">{editing ? 'Editar producto' : 'Nuevo producto'}</h2>
-          <ProductForm
-            product={editing ?? undefined}
-            onSubmit={editing ? handleUpdate : handleCreate}
-          />
-          <button
-            onClick={() => { setCreating(false); setEditing(null) }}
-            className="mt-3 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
-          >
-            Cancelar
-          </button>
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]">
+          <div className="absolute inset-0 bg-black/40" onClick={() => { setCreating(false); setEditing(null) }} />
+          <div className="relative bg-white rounded-xl shadow-xl p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-4">{editing ? 'Editar producto' : 'Nuevo producto'}</h2>
+            <ProductForm
+              key={editing?.id ?? 'create'}
+              product={editing ?? undefined}
+              categories={categories}
+              offers={offers}
+              onSubmit={editing ? handleUpdate : handleCreate}
+              onCancel={() => { setCreating(false); setEditing(null) }}
+            />
+          </div>
         </div>
       )}
 

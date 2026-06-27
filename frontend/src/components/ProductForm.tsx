@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { getAll as getCategories } from '../services/categoryService'
-import { getAll as getOffers } from '../services/offerService'
 import type { Product } from '../types/Product'
 import type { Category } from '../types/Category'
 import type { Offer } from '../types/Offer'
@@ -19,13 +16,13 @@ export interface ProductFormData {
 
 interface ProductFormProps {
   product?: Product
+  categories: Category[]
+  offers: Offer[]
   onSubmit: (data: ProductFormData) => Promise<void> | void
+  onCancel?: () => void
 }
 
-function ProductForm({ product, onSubmit }: ProductFormProps) {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [offers, setOffers] = useState<Offer[]>([])
-
+function ProductForm({ product, categories, offers, onSubmit, onCancel }: ProductFormProps) {
   const {
     register,
     handleSubmit,
@@ -42,11 +39,6 @@ function ProductForm({ product, onSubmit }: ProductFormProps) {
       isActive: product?.isActive ?? true,
     },
   })
-
-  useEffect(() => {
-    getCategories().then(setCategories)
-    getOffers().then(setOffers)
-  }, [])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-md">
@@ -138,13 +130,20 @@ function ProductForm({ product, onSubmit }: ProductFormProps) {
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
-      >
-        {isSubmitting ? 'Guardando...' : product ? 'Actualizar producto' : 'Crear producto'}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+        >
+          {isSubmitting ? 'Guardando...' : product ? 'Actualizar producto' : 'Crear producto'}
+        </button>
+        {onCancel && (
+          <button type="button" onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+            Cancelar
+          </button>
+        )}
+      </div>
     </form>
   )
 }

@@ -7,8 +7,10 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate()
-  const hasDiscount = product.offerId !== null
-  const discountValue = 10 // mock — vendrá del backend cuando se incluya la oferta
+  const hasDiscount = product.discountPercentage !== null && product.discountPercentage > 0
+  const discountedPrice = hasDiscount
+    ? Math.round(product.price * (1 - (product.discountPercentage ?? 0) / 100))
+    : null
 
   return (
     <div
@@ -31,7 +33,7 @@ function ProductCard({ product }: ProductCardProps) {
         )}
         {hasDiscount && (
           <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-            {discountValue}% OFF
+            {product.discountPercentage}% OFF
           </span>
         )}
       </div>
@@ -41,9 +43,22 @@ function ProductCard({ product }: ProductCardProps) {
           <span className="text-xs text-gray-400 uppercase tracking-wide">{product.categoryName}</span>
         )}
         <h3 className="font-medium text-sm text-gray-800 line-clamp-2">{product.name}</h3>
-        <p className="text-lg font-bold text-gray-900 mt-auto">
-          ${Math.round(product.price).toLocaleString('es-AR')}
-        </p>
+        <div className="mt-auto">
+          {hasDiscount ? (
+            <div className="flex items-baseline gap-2">
+              <p className="text-lg font-bold text-gray-900">
+                ${discountedPrice?.toLocaleString('es-AR')}
+              </p>
+              <p className="text-sm text-gray-400 line-through">
+                ${Math.round(product.price).toLocaleString('es-AR')}
+              </p>
+            </div>
+          ) : (
+            <p className="text-lg font-bold text-gray-900">
+              ${Math.round(product.price).toLocaleString('es-AR')}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -8,6 +8,8 @@ export interface Product {
   categoryId: string
   categoryName: string | null
   offerId: string | null
+  offerName: string | null
+  discountPercentage: number | null
   isActive: boolean
   createdAt: string
   updatedAt: string | null

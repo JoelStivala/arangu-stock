@@ -11,6 +11,8 @@ public class ProductResponseDto
     public Guid CategoryId { get; set; }
     public string? CategoryName { get; set; }
     public Guid? OfferId { get; set; }
+    public string? OfferName { get; set; }
+    public short? DiscountPercentage { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

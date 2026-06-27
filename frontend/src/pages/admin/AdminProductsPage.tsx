@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getAllAdmin, create, update, remove, activate } from '../../services/productService'
 import type { Product } from '../../types/Product'
 import ProductForm, { type ProductFormData } from '../../components/ProductForm'
+import ConfirmModal from '../../components/ConfirmModal'
 
 function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -9,6 +10,7 @@ function AdminProductsPage() {
   const [error, setError] = useState<string | null>(null)
   const [editing, setEditing] = useState<Product | null>(null)
   const [creating, setCreating] = useState(false)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   const load = () => {
     setLoading(true)
@@ -52,8 +54,8 @@ function AdminProductsPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('¿Desactivar este producto?')) return
     await remove(id)
+    setDeleting(null)
     load()
   }
 
@@ -71,7 +73,7 @@ function AdminProductsPage() {
         <h1 className="text-2xl font-bold text-gray-900">Productos</h1>
         <button
           onClick={() => setCreating(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
         >
           + Nuevo producto
         </button>
@@ -86,7 +88,7 @@ function AdminProductsPage() {
           />
           <button
             onClick={() => { setCreating(false); setEditing(null) }}
-            className="mt-3 text-sm text-gray-500 hover:text-gray-700"
+            className="mt-3 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
           >
             Cancelar
           </button>
@@ -131,14 +133,14 @@ function AdminProductsPage() {
                     {product.isActive ? (
                       <>
                         <button
-                          onClick={() => { setEditing(product); setCreating(false) }}
-                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                          onClick={() => { setEditing(product); setCreating(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer"
                         >
                           Editar
                         </button>
                         <button
-                          onClick={() => handleDelete(product.id)}
-                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                          onClick={() => setDeleting(product.id)}
+                          className="text-red-600 hover:text-red-800 text-sm font-medium cursor-pointer"
                         >
                           Desactivar
                         </button>
@@ -146,7 +148,7 @@ function AdminProductsPage() {
                     ) : (
                       <button
                         onClick={() => handleActivate(product.id)}
-                        className="text-green-600 hover:text-green-800 text-sm font-medium"
+                        className="text-green-600 hover:text-green-800 text-sm font-medium cursor-pointer"
                       >
                         Reactivar
                       </button>
@@ -158,6 +160,14 @@ function AdminProductsPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmModal
+        open={deleting !== null}
+        title="Desactivar producto"
+        message="¿Estás seguro de que querés desactivar este producto?"
+        confirmLabel="Desactivar"
+        onConfirm={() => { if (deleting) handleDelete(deleting) }}
+        onCancel={() => setDeleting(null)}
+      />
     </div>
   )
 }

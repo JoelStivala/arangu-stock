@@ -7,6 +7,10 @@ function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [product, setProduct] = useState<Product | null>(null)
+  const hasDiscount = product !== null && product.discountPercentage !== null && product.discountPercentage > 0
+  const discountedPrice = hasDiscount
+    ? Math.round((product?.price ?? 0) * (1 - ((product?.discountPercentage ?? 0) / 100)))
+    : null
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -84,9 +88,23 @@ function ProductDetailPage() {
             {product.name}
           </h1>
 
-          <p className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900">
-            ${Math.round(product.price).toLocaleString('es-AR')}
-          </p>
+          {hasDiscount ? (
+            <div className="mt-4 flex items-baseline gap-3">
+              <p className="text-3xl sm:text-4xl font-bold text-gray-900">
+                ${discountedPrice?.toLocaleString('es-AR')}
+              </p>
+              <p className="text-xl sm:text-2xl text-gray-400 line-through">
+                ${Math.round(product.price).toLocaleString('es-AR')}
+              </p>
+              <span className="bg-red-100 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                {product.discountPercentage}% OFF
+              </span>
+            </div>
+          ) : (
+            <p className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900">
+              ${Math.round(product.price).toLocaleString('es-AR')}
+            </p>
+          )}
 
           {product.description && (
             <p className="mt-6 text-gray-600 leading-relaxed">

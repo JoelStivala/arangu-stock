@@ -18,6 +18,8 @@ public static class ProductMapper
             CategoryId = product.CategoryId,
             CategoryName = product.Category?.Name,
             OfferId = product.OfferId,
+            OfferName = product.Offer?.Name,
+            DiscountPercentage = product.Offer?.DiscountPercentage,
             IsActive = product.IsActive,
             CreatedAt = product.CreatedAt,
             UpdatedAt = product.UpdatedAt

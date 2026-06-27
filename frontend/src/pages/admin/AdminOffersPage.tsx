@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getAll, create, update, remove } from '../../services/offerService'
 import type { Offer } from '../../types/Offer'
+import ConfirmModal from '../../components/ConfirmModal'
 
 interface OfferForm {
   name: string
@@ -26,6 +27,7 @@ function AdminOffersPage() {
   const [error, setError] = useState<string | null>(null)
   const [editing, setEditing] = useState<Offer | null>(null)
   const [creating, setCreating] = useState(false)
+  const [deleting, setDeleting] = useState<string | null>(null)
   const [form, setForm] = useState<OfferForm>(emptyForm)
 
   const load = () => {
@@ -58,12 +60,13 @@ function AdminOffersPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('¿Eliminar esta oferta?')) return
     await remove(id)
+    setDeleting(null)
     load()
   }
 
   const startEdit = (offer: Offer) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     setForm({
       name: offer.name,
       description: offer.description ?? '',
@@ -85,7 +88,7 @@ function AdminOffersPage() {
         <h1 className="text-2xl font-bold text-gray-900">Ofertas</h1>
         <button
           onClick={() => { resetForm(); setCreating(true) }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
         >
           + Nueva oferta
         </button>
@@ -155,10 +158,10 @@ function AdminOffersPage() {
               />
             </div>
             <div className="sm:col-span-2 flex gap-2">
-              <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+              <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer">
                 {editing ? 'Actualizar' : 'Crear'}
               </button>
-              <button type="button" onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700">
+              <button type="button" onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
                 Cancelar
               </button>
             </div>
@@ -192,10 +195,10 @@ function AdminOffersPage() {
                 <td className="p-4 text-gray-500">{offer.endDate ? new Date(offer.endDate).toLocaleDateString() : '—'}</td>
                 <td className="p-4">
                   <div className="flex gap-2">
-                    <button onClick={() => startEdit(offer)} className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                    <button onClick={() => startEdit(offer)} className="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer">
                       Editar
                     </button>
-                    <button onClick={() => handleDelete(offer.id)} className="text-red-600 hover:text-red-800 text-sm font-medium">
+                    <button onClick={() => setDeleting(offer.id)} className="text-red-600 hover:text-red-800 text-sm font-medium cursor-pointer">
                       Eliminar
                     </button>
                   </div>
@@ -205,6 +208,14 @@ function AdminOffersPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmModal
+        open={deleting !== null}
+        title="Eliminar oferta"
+        message="¿Estás seguro de que querés eliminar esta oferta?"
+        confirmLabel="Eliminar"
+        onConfirm={() => { if (deleting) handleDelete(deleting) }}
+        onCancel={() => setDeleting(null)}
+      />
     </div>
   )
 }

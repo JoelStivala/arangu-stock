@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,12 @@ namespace backend.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IProductService _service;
+    private readonly IRoleService _roleService;
 
-    public ProductController(IProductService service)
+    public ProductController(IProductService service, IRoleService roleService)
     {
         _service = service;
+        _roleService = roleService;
     }
 
     [HttpGet]
@@ -27,6 +30,7 @@ public class ProductController : ControllerBase
     [HttpGet("admin")]
     public async Task<ActionResult<List<ProductResponseDto>>> GetAllAdmin()
     {
+        if (!await IsAdminOrEmployee()) return Forbid();
         var products = await _service.GetAllAdminAsync();
         return Ok(products);
     }
@@ -44,6 +48,7 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProductResponseDto>> Create(CreateProductDto dto)
     {
+        if (!await IsAdminOrEmployee()) return Forbid();
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -52,6 +57,7 @@ public class ProductController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ProductResponseDto>> Update(Guid id, UpdateProductDto dto)
     {
+        if (!await IsAdminOrEmployee()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
@@ -64,6 +70,7 @@ public class ProductController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
+        if (!await IsAdminOrEmployee()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
@@ -76,6 +83,7 @@ public class ProductController : ControllerBase
     [HttpPatch("{id:guid}/activate")]
     public async Task<ActionResult> Activate(Guid id)
     {
+        if (!await IsAdminOrEmployee()) return Forbid();
         try
         {
             await _service.ActivateAsync(id);
@@ -85,5 +93,13 @@ public class ProductController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    private async Task<bool> IsAdminOrEmployee()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null) return false;
+        var role = await _roleService.GetRoleAsync(Guid.Parse(userId));
+        return role is "admin" or "employee";
     }
 }

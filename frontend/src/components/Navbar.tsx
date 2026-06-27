@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../lib/useAuth'
 
 function Navbar() {
-  const { isAuthenticated, user, signOut } = useAuth()
+  const { isAuthenticated, user, role, signOut } = useAuth()
   const [adminOpen, setAdminOpen] = useState(false)
 
   return (
@@ -31,40 +31,53 @@ function Navbar() {
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <span className="text-sm text-gray-500 hidden sm:block">{user?.email}</span>
-                <div className="relative">
+                {role === 'admin' || role === 'employee' ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => setAdminOpen(!adminOpen)}
+                      className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      Administración
+                      <svg className={`w-4 h-4 transition-transform ${adminOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {adminOpen && (
+                      <>
+                        <div className="fixed inset-0 z-10" onClick={() => setAdminOpen(false)} />
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20">
+                          <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
+                            Productos
+                          </Link>
+                          {role === 'admin' && (
+                            <>
+                              <Link to="/admin/categories" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
+                                Categorías
+                              </Link>
+                              <Link to="/admin/offers" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
+                                Ofertas
+                              </Link>
+                            </>
+                          )}
+                          <hr className="my-1 border-gray-100" />
+                          <button
+                            onClick={() => { signOut(); setAdminOpen(false) }}
+                            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                          >
+                            Cerrar sesión
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ) : (
                   <button
-                    onClick={() => setAdminOpen(!adminOpen)}
-                    className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                    onClick={() => { signOut(); setAdminOpen(false) }}
+                    className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors"
                   >
-                    Administración
-                    <svg className={`w-4 h-4 transition-transform ${adminOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    Cerrar sesión
                   </button>
-                  {adminOpen && (
-                    <>
-                      <div className="fixed inset-0 z-10" onClick={() => setAdminOpen(false)} />
-                      <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20">
-                        <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
-                          Productos
-                        </Link>
-                        <Link to="/admin/categories" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
-                          Categorías
-                        </Link>
-                        <Link to="/admin/offers" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setAdminOpen(false)}>
-                          Ofertas
-                        </Link>
-                        <hr className="my-1 border-gray-100" />
-                        <button
-                          onClick={() => { signOut(); setAdminOpen(false) }}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
-                        >
-                          Cerrar sesión
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
+                )}
               </div>
             ) : (
               <NavLink to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">

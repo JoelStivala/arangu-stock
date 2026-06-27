@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,12 @@ namespace backend.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _service;
+    private readonly IRoleService _roleService;
 
-    public CategoryController(ICategoryService service)
+    public CategoryController(ICategoryService service, IRoleService roleService)
     {
         _service = service;
+        _roleService = roleService;
     }
 
     [HttpGet]
@@ -36,6 +39,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CategoryResponseDto>> Create(CreateCategoryDto dto)
     {
+        if (!await IsAdmin()) return Forbid();
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -44,6 +48,7 @@ public class CategoryController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<CategoryResponseDto>> Update(Guid id, UpdateCategoryDto dto)
     {
+        if (!await IsAdmin()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
@@ -56,11 +61,20 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
+        if (!await IsAdmin()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
 
         await _service.DeleteAsync(id);
         return NoContent();
+    }
+
+    private async Task<bool> IsAdmin()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null) return false;
+        var role = await _roleService.GetRoleAsync(Guid.Parse(userId));
+        return role == "admin";
     }
 }

@@ -60,6 +60,7 @@ builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 

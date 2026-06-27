@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,12 @@ namespace backend.Controllers;
 public class OfferController : ControllerBase
 {
     private readonly IOfferService _service;
+    private readonly IRoleService _roleService;
 
-    public OfferController(IOfferService service)
+    public OfferController(IOfferService service, IRoleService roleService)
     {
         _service = service;
+        _roleService = roleService;
     }
 
     [HttpGet]
@@ -36,6 +39,7 @@ public class OfferController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<OfferResponseDto>> Create(CreateOfferDto dto)
     {
+        if (!await IsAdmin()) return Forbid();
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -44,6 +48,7 @@ public class OfferController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<OfferResponseDto>> Update(Guid id, UpdateOfferDto dto)
     {
+        if (!await IsAdmin()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
@@ -56,11 +61,20 @@ public class OfferController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
+        if (!await IsAdmin()) return Forbid();
         var existing = await _service.GetByIdAsync(id);
         if (existing is null)
             return NotFound();
 
         await _service.DeleteAsync(id);
         return NoContent();
+    }
+
+    private async Task<bool> IsAdmin()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null) return false;
+        var role = await _roleService.GetRoleAsync(Guid.Parse(userId));
+        return role == "admin";
     }
 }

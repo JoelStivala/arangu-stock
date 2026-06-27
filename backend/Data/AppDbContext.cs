@@ -19,6 +19,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Category> Categories { get; set; }
     public virtual DbSet<Offer> Offers { get; set; }
     public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -112,6 +113,22 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Offer).WithMany(p => p.Products)
                 .HasForeignKey(d => d.OfferId)
                 .HasConstraintName("products_offer_id_fkey");
+        });
+
+        modelBuilder.Entity<Profile>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("profiles_pkey");
+
+            entity.ToTable("profiles");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.Role).HasColumnName("role");
         });
 
         OnModelCreatingPartial(modelBuilder);

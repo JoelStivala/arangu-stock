@@ -23,6 +23,7 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
+    [Authorize]
     [HttpGet("admin")]
     public async Task<ActionResult<List<ProductResponseDto>>> GetAllAdmin()
     {
@@ -39,6 +40,7 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<ProductResponseDto>> Create(CreateProductDto dto)
     {
@@ -46,6 +48,7 @@ public class ProductController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    [Authorize]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ProductResponseDto>> Update(Guid id, UpdateProductDto dto)
     {
@@ -57,6 +60,7 @@ public class ProductController : ControllerBase
         return Ok(updated);
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
@@ -68,6 +72,7 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPatch("{id:guid}/activate")]
     public async Task<ActionResult> Activate(Guid id)
     {

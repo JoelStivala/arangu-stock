@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import type { Product } from '../types/Product'
 
 interface ProductCardProps {
@@ -5,11 +6,15 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  const navigate = useNavigate()
   const hasDiscount = product.offerId !== null
   const discountValue = 10 // mock — vendrá del backend cuando se incluya la oferta
 
   return (
-    <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 border border-gray-100 overflow-hidden flex flex-col">
+    <div
+      onClick={() => navigate(`/products/${product.id}`)}
+      className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 border border-gray-100 overflow-hidden flex flex-col cursor-pointer"
+    >
       <div className="relative aspect-square bg-gray-50 overflow-hidden">
         {product.imageUrl ? (
           <img

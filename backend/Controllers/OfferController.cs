@@ -1,5 +1,6 @@
 using backend.DTOs;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -31,6 +32,7 @@ public class OfferController : ControllerBase
         return Ok(offer);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<OfferResponseDto>> Create(CreateOfferDto dto)
     {
@@ -38,6 +40,7 @@ public class OfferController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    [Authorize]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<OfferResponseDto>> Update(Guid id, UpdateOfferDto dto)
     {
@@ -49,6 +52,7 @@ public class OfferController : ControllerBase
         return Ok(updated);
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {

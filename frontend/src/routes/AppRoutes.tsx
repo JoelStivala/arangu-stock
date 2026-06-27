@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import HomePage from '../pages/HomePage'
+import ProductDetailPage from '../pages/ProductDetailPage'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import ProtectedRoute from '../components/ProtectedRoute'
@@ -13,6 +14,7 @@ function AppRoutes() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="products/:id" element={<ProductDetailPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="admin/products" element={<AdminProductsPage />} />

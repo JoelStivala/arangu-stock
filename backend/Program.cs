@@ -17,6 +17,8 @@ var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL")
 var supabaseJwksUrl = Environment.GetEnvironmentVariable("SUPABASE_JWKS_URL") 
     ?? throw new InvalidOperationException("SUPABASE_JWKS_URL no está definida en .env");
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -70,6 +72,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.Urls.Add($"http://*:{port}");
 
 app.UseCors("AllowFrontend");
 

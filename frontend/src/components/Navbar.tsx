@@ -18,19 +18,19 @@ function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2" onClick={() => setSearch('')}>
+        <div className="flex items-center h-16">
+          <Link to="/" className="flex-1 flex items-center gap-2" onClick={() => setSearch('')}>
             <span className="text-xl font-bold text-gray-900">AranguStock</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
-            <form onSubmit={handleSearch} className="relative">
+          <div className="flex-1 flex justify-center">
+            <form onSubmit={handleSearch} className="relative w-full max-w-xs sm:max-w-sm">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar productos..."
-                className="w-64 pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button type="submit" className="absolute right-3 top-2.5">
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ function Navbar() {
             </form>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex-1 flex items-center justify-end gap-4">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <span className="text-sm text-gray-500 hidden sm:block">{user?.email}</span>

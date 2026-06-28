@@ -140,3 +140,83 @@ Este proyecto fue desarrollado como challenge técnico con el objetivo de demost
 - Contenedores Docker.
 - Despliegue en la nube.
 - Integración de servicios externos.
+
+---
+
+## Decisiones técnicas
+
+Se eligió una arquitectura separada entre frontend y backend para facilitar el mantenimiento, el despliegue independiente de cada aplicación y la escalabilidad del proyecto.
+
+- React + TypeScript fueron elegidos para desarrollar una interfaz moderna, tipada y mantenible.
+- ASP.NET Core Web API se utilizó para implementar una API REST robusta y desacoplada.
+- Entity Framework Core permitió acelerar el acceso a datos mediante un enfoque ORM.
+- Supabase fue elegido por ofrecer PostgreSQL, autenticación y almacenamiento de archivos en una única plataforma.
+- Docker se utilizó para garantizar la portabilidad del backend y facilitar el despliegue.
+- Vercel y Render permitieron desplegar frontend y backend de forma independiente.
+
+---
+
+## Herramientas de IA utilizadas
+
+Durante el desarrollo se utilizaron herramientas de inteligencia artificial como apoyo técnico y aceleración del desarrollo.
+
+- ChatGPT fue utilizado para diseño de arquitectura, revisión de decisiones técnicas, generación de documentación y asistencia durante el desarrollo.
+- OpenCode fue utilizado como agente de programación para acelerar la implementación de componentes, configuraciones y tareas repetitivas.
+
+Las herramientas de IA fueron utilizadas como asistentes de desarrollo, manteniendo siempre la revisión y validación manual del código generado.
+
+---
+
+## Instalación y ejecución local
+
+### Backend
+
+```bash
+cd backend
+dotnet restore
+dotnet run
+```
+
+Variables de entorno necesarias:
+
+```env
+CONNECTION_STRING=
+SUPABASE_URL=
+SUPABASE_JWKS_URL=
+```
+
+---
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Variables de entorno necesarias:
+
+```env
+VITE_API_URL=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+```
+
+---
+
+### Docker
+
+También es posible ejecutar el backend mediante Docker:
+
+```bash
+docker build -t arangustock-api .
+docker run -p 8080:8080 --env-file .env arangustock-api
+```
+
+---
+
+## Demo
+
+Frontend: https://arangu-stock.vercel.app/
+API: https://arangu-stock.onrender.com/api/

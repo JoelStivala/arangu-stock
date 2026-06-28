@@ -45,7 +45,7 @@ function HomePage() {
       )}
 
       {/* Productos */}
-      <section id="productos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section id="productos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 scroll-mt-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-900">Productos</h2>
         </div>

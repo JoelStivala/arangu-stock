@@ -23,6 +23,7 @@ function HomePage() {
   return (
     <div>
       {/* Hero */}
+      {!search && (
       <section className="bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <div className="max-w-2xl">
@@ -41,6 +42,7 @@ function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Productos */}
       <section id="productos" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

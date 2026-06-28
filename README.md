@@ -9,6 +9,7 @@ AranguStock permite visualizar productos mediante un catálogo público y admini
 ## Demo
 
 Frontend: https://arangu-stock.vercel.app/
+
 API: https://arangu-stock.onrender.com/api/
 
 ---

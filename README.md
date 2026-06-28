@@ -6,6 +6,13 @@ AranguStock permite visualizar productos mediante un catálogo público y admini
 
 ---
 
+## Demo
+
+Frontend: https://arangu-stock.vercel.app/
+API: https://arangu-stock.onrender.com/api/
+
+---
+
 ## Características
 
 ### Catálogo público
@@ -213,10 +220,3 @@ También es posible ejecutar el backend mediante Docker:
 docker build -t arangustock-api .
 docker run -p 8080:8080 --env-file .env arangustock-api
 ```
-
----
-
-## Demo
-
-Frontend: https://arangu-stock.vercel.app/
-API: https://arangu-stock.onrender.com/api/

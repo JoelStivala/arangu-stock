@@ -121,7 +121,7 @@ function Navbar() {
             {isAuthenticated ? (
               <div className="relative md:hidden">
                 <button
-                  onClick={() => setAdminOpen(!adminOpen)}
+                  onClick={() => { setSearchOpen(false); setAdminOpen(!adminOpen) }}
                   className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +130,7 @@ function Navbar() {
                 </button>
                 {adminOpen && (
                   <>
-                    <div className="fixed inset-0 z-10" onClick={() => setAdminOpen(false)} />
+                    <div className="fixed inset-0 z-10" onClick={() => { setSearchOpen(false); setAdminOpen(false) }} />
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20">
                       <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-100">
                         {user?.email}
@@ -164,7 +164,7 @@ function Navbar() {
                 )}
               </div>
             ) : (
-              <NavLink to="/login" className="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <NavLink to="/login" onClick={() => setSearchOpen(false)} className="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>

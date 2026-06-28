@@ -4,7 +4,7 @@ namespace backend.Repositories;
 
 public interface IProductRepository
 {
-    Task<List<Product>> GetAllAsync();
+    Task<List<Product>> GetAllAsync(string? search = null);
     Task<List<Product>> GetAllAdminAsync();
     Task<Product?> GetByIdAsync(Guid id);
     Task<Product?> GetByIdIncludingInactiveAsync(Guid id);

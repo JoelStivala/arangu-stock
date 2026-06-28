@@ -13,9 +13,9 @@ public class ProductService : IProductService
         _repository = repository;
     }
 
-    public async Task<List<ProductResponseDto>> GetAllAsync()
+    public async Task<List<ProductResponseDto>> GetAllAsync(string? search = null)
     {
-        var products = await _repository.GetAllAsync();
+        var products = await _repository.GetAllAsync(search);
         return products.Select(p => p.ToResponseDto()).ToList();
     }
 

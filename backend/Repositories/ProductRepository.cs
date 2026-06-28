@@ -13,12 +13,20 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<List<Product>> GetAllAsync(string? search = null)
     {
-        return await _context.Products
+        var query = _context.Products
             .Include(p => p.Category)
             .Include(p => p.Offer)
-            .Where(p => p.IsActive)
+            .Where(p => p.IsActive);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim().ToLower();
+            query = query.Where(p => p.Name.ToLower().Contains(term));
+        }
+
+        return await query
             .OrderBy(p => p.Name)
             .ToListAsync();
     }

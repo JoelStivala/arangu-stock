@@ -22,8 +22,8 @@ export interface UpdateProductPayload {
   isActive: boolean
 }
 
-export const getAll = () =>
-  api.get<Product[]>('/product').then((r) => r.data)
+export const getAll = (search?: string) =>
+  api.get<Product[]>('/product', { params: { search } }).then((r) => r.data)
 
 export const getById = (id: string) =>
   api.get<Product>(`/product/${id}`).then((r) => r.data)

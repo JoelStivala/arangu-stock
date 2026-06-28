@@ -4,7 +4,7 @@ namespace backend.Services;
 
 public interface IProductService
 {
-    Task<List<ProductResponseDto>> GetAllAsync();
+    Task<List<ProductResponseDto>> GetAllAsync(string? search = null);
     Task<List<ProductResponseDto>> GetAllAdminAsync();
     Task<ProductResponseDto?> GetByIdAsync(Guid id);
     Task<ProductResponseDto> CreateAsync(CreateProductDto dto);

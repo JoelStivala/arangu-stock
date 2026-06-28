@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getAll } from '../services/productService'
 import type { Product } from '../types/Product'
 import ProductCard from '../components/ProductCard'
 
 function HomePage() {
+  const [searchParams] = useSearchParams()
+  const search = searchParams.get('search') ?? undefined
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    getAll()
+    setLoading(true)
+    setError(null)
+    getAll(search)
       .then(setProducts)
       .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar productos'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [search])
 
   return (
     <div>
@@ -63,9 +68,15 @@ function HomePage() {
           </div>
         )}
 
-        {!loading && !error && products.filter((p) => p.isActive).length === 0 && (
-          <div className="text-center py-20 text-gray-500">
-            No hay productos disponibles.
+        {!loading && !error && products.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+            <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <p className="text-lg font-medium text-gray-500">No se encontraron productos.</p>
+            {search && (
+              <p className="text-sm text-gray-400 mt-1">Probá con otro término de búsqueda.</p>
+            )}
           </div>
         )}
       </section>

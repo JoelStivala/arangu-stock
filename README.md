@@ -116,14 +116,6 @@ Documentación: https://arangu-stock.onrender.com/swagger/
 
 ---
 
-## Próximas funcionalidades
-
-* Sugerencias automáticas de contenido.
-* Mejoras de UX/UI.
-* Panel administrativo avanzado.
-
----
-
 ## Arquitectura
 
 ```text

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Scalar.AspNetCore;
 
 DotEnv.Load();
 
@@ -23,7 +22,9 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
@@ -69,9 +70,9 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 
-app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.MapScalarApiReference();
 //app.UseHttpsRedirection();
 app.Urls.Add($"http://*:{port}");
 

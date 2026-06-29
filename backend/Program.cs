@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 
 DotEnv.Load();
 
@@ -68,11 +69,9 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.MapOpenApi();
 
+app.MapScalarApiReference();
 //app.UseHttpsRedirection();
 app.Urls.Add($"http://*:{port}");
 

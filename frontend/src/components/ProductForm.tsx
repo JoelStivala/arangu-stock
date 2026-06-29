@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { Product } from '../types/Product'
 import type { Category } from '../types/Category'
 import type { Offer } from '../types/Offer'
+import { generateDescription } from '../services/aiService'
 
 export interface ProductFormData {
   name: string
@@ -23,9 +25,14 @@ interface ProductFormProps {
 }
 
 function ProductForm({ product, categories, offers, onSubmit, onCancel }: ProductFormProps) {
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
+
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     defaultValues: {
@@ -39,6 +46,23 @@ function ProductForm({ product, categories, offers, onSubmit, onCancel }: Produc
       isActive: product?.isActive ?? true,
     },
   })
+
+  const nameValue = watch('name')
+  const categoryIdValue = watch('categoryId')
+
+  const handleGenerateDescription = async () => {
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const categoryName = categories.find((c) => c.id === categoryIdValue)?.name ?? ''
+      const res = await generateDescription({ name: nameValue, category: categoryName })
+      setValue('description', res.description)
+    } catch {
+      setAiError('No se pudo generar la descripción. Intentalo de nuevo.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-md">
@@ -57,6 +81,17 @@ function ProductForm({ product, categories, offers, onSubmit, onCancel }: Produc
           {...register('description')}
           className="w-full border rounded px-3 py-2"
         />
+        <div className="flex items-center gap-2 mt-1">
+          <button
+            type="button"
+            disabled={!nameValue || aiLoading}
+            onClick={handleGenerateDescription}
+            className="text-sm bg-gray-100 border border-gray-300 rounded px-3 py-1 hover:bg-gray-200 disabled:opacity-50 cursor-pointer"
+          >
+            {aiLoading ? 'Generando...' : 'Generar con IA'}
+          </button>
+          {aiError && <span className="text-red-600 text-sm">{aiError}</span>}
+        </div>
       </div>
 
       <div>

@@ -20,28 +20,29 @@ Documentación: https://arangu-stock.onrender.com/swagger/
 
 ### Catálogo público
 
-- Visualización de productos activos.
-- Búsqueda de productos.
-- Página de detalle del producto.
-- Visualización de imágenes almacenadas en Supabase Storage.
-- Navegación responsive.
+* Visualización de productos activos.
+* Búsqueda de productos.
+* Página de detalle del producto.
+* Visualización de imágenes almacenadas en Supabase Storage.
+* Navegación responsive.
 
 ### Administración
 
-- Login mediante Supabase Auth.
-- Protección de rutas mediante JWT.
-- Gestión de productos.
-- Alta y modificación de categorías.
-- Gestión de ofertas.
-- Baja lógica y reactivación de productos.
-- Control de acceso mediante roles.
+* Login mediante Supabase Auth.
+* Protección de rutas mediante JWT.
+* Gestión de productos.
+* Alta y modificación de categorías.
+* Gestión de ofertas.
+* Baja lógica y reactivación de productos.
+* Control de acceso mediante roles.
+* Generación automática de descripciones mediante IA.
 
 ### Seguridad
 
-- Autenticación JWT.
-- Validación de tokens emitidos por Supabase.
-- Endpoints protegidos en ASP.NET Core.
-- Autorización basada en roles almacenados en base de datos.
+* Autenticación JWT.
+* Validación de tokens emitidos por Supabase.
+* Endpoints protegidos en ASP.NET Core.
+* Autorización mediante roles almacenados en base de datos.
 
 ---
 
@@ -49,33 +50,34 @@ Documentación: https://arangu-stock.onrender.com/swagger/
 
 ### Frontend
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- React Router
-- Axios
-- Supabase JS
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* React Router
+* Axios
+* Supabase JS
 
 ### Backend
 
-- ASP.NET Core Web API (.NET 10)
-- Entity Framework Core
-- JWT Bearer Authentication
-- Repository Pattern
-- Service Layer
+* ASP.NET Core Web API (.NET 10)
+* Entity Framework Core
+* JWT Bearer Authentication
+* Repository Pattern
+* Service Layer
+* Google GenAI (Gemini)
 
 ### Base de datos
 
-- PostgreSQL (Supabase)
-- Supabase Auth
-- Supabase Storage
+* PostgreSQL (Supabase)
+* Supabase Auth
+* Supabase Storage
 
 ### Infraestructura
 
-- Docker
-- Render
-- Vercel
+* Docker
+* Render
+* Vercel
 
 ---
 
@@ -83,16 +85,16 @@ Documentación: https://arangu-stock.onrender.com/swagger/
 
 ### Administrador
 
-- Gestión completa de productos.
-- Gestión de categorías.
-- Gestión de ofertas.
-- Administración del catálogo.
+* Gestión completa de productos.
+* Gestión de categorías.
+* Gestión de ofertas.
+* Administración del catálogo.
 
 ### Empleado
 
-- Gestión de productos.
-- Activación y desactivación de productos.
-- Actualización de stock e información.
+* Gestión de productos.
+* Activación y desactivación de productos.
+* Actualización de stock e información.
 
 ---
 
@@ -110,16 +112,15 @@ Documentación: https://arangu-stock.onrender.com/swagger/
 
 ✅ Despliegue mediante Docker.
 
-🚧 Integración con IA (próximamente).
+✅ Integración con Gemini para generación de descripciones.
 
 ---
 
 ## Próximas funcionalidades
 
-- Generación asistida de descripciones mediante IA.
-- Sugerencias automáticas de contenido.
-- Mejoras de UX/UI.
-- Panel administrativo avanzado.
+* Sugerencias automáticas de contenido.
+* Mejoras de UX/UI.
+* Panel administrativo avanzado.
 
 ---
 
@@ -135,6 +136,8 @@ Entity Framework Core
 PostgreSQL (Supabase)
         ↓
 Supabase Auth + Storage
+        ↓
+Gemini API
 ```
 
 ---
@@ -143,13 +146,13 @@ Supabase Auth + Storage
 
 Este proyecto fue desarrollado como challenge técnico con el objetivo de demostrar conocimientos en:
 
-- Desarrollo Full Stack.
-- Arquitectura de APIs.
-- Bases de datos.
-- Autenticación y autorización.
-- Contenedores Docker.
-- Despliegue en la nube.
-- Integración de servicios externos.
+* Desarrollo Full Stack.
+* Arquitectura de APIs.
+* Bases de datos.
+* Autenticación y autorización.
+* Contenedores Docker.
+* Despliegue en la nube.
+* Integración de servicios externos.
 
 ---
 
@@ -157,12 +160,13 @@ Este proyecto fue desarrollado como challenge técnico con el objetivo de demost
 
 Se eligió una arquitectura separada entre frontend y backend para facilitar el mantenimiento, el despliegue independiente de cada aplicación y la escalabilidad del proyecto.
 
-- React + TypeScript fueron elegidos para desarrollar una interfaz moderna, tipada y mantenible.
-- ASP.NET Core Web API se utilizó para implementar una API REST robusta y desacoplada.
-- Entity Framework Core permitió acelerar el acceso a datos mediante un enfoque ORM.
-- Supabase fue elegido por ofrecer PostgreSQL, autenticación y almacenamiento de archivos en una única plataforma.
-- Docker se utilizó para garantizar la portabilidad del backend y facilitar el despliegue.
-- Vercel y Render permitieron desplegar frontend y backend de forma independiente.
+* React + TypeScript fueron elegidos para desarrollar una interfaz moderna, tipada y mantenible.
+* ASP.NET Core Web API se utilizó para implementar una API REST robusta y desacoplada.
+* Entity Framework Core permitió acelerar el acceso a datos mediante un enfoque ORM.
+* Supabase fue elegido por ofrecer PostgreSQL, autenticación y almacenamiento de archivos en una única plataforma.
+* Docker se utilizó para garantizar la portabilidad del backend y facilitar el despliegue.
+* Vercel y Render permitieron desplegar frontend y backend de forma independiente.
+* Gemini fue integrado para asistir a los usuarios en la generación de descripciones de productos a partir de su título.
 
 ---
 
@@ -170,8 +174,9 @@ Se eligió una arquitectura separada entre frontend y backend para facilitar el 
 
 Durante el desarrollo se utilizaron herramientas de inteligencia artificial como apoyo técnico y aceleración del desarrollo.
 
-- ChatGPT fue utilizado para diseño de arquitectura, revisión de decisiones técnicas, generación de documentación y asistencia durante el desarrollo.
-- OpenCode fue utilizado como agente de programación para acelerar la implementación de componentes, configuraciones y tareas repetitivas.
+* ChatGPT fue utilizado para diseño de arquitectura, revisión de decisiones técnicas, generación de documentación y asistencia durante el desarrollo.
+* OpenCode fue utilizado como agente de programación para acelerar la implementación de componentes, configuraciones y tareas repetitivas.
+* Gemini fue integrado dentro de la aplicación para generar automáticamente descripciones de productos a partir de su título.
 
 Las herramientas de IA fueron utilizadas como asistentes de desarrollo, manteniendo siempre la revisión y validación manual del código generado.
 
@@ -193,6 +198,7 @@ Variables de entorno necesarias:
 CONNECTION_STRING=
 SUPABASE_URL=
 SUPABASE_JWKS_URL=
+GEMINI_API_KEY=
 ```
 
 ---

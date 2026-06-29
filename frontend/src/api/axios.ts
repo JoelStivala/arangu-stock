@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 
 const api = axios.create({
   baseURL: apiUrl,
-  timeout: 10000,
+  timeout: 35000,
 })
 
 api.interceptors.request.use(async (config) => {
